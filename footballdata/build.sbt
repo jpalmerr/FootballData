@@ -30,3 +30,5 @@ scalacOptions ++= Seq(
   "-feature",
   "-Xfatal-warnings",
 )
+
+addCommandAlias("commitCheck", "clean; compile; test")
