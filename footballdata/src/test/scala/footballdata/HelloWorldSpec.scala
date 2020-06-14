@@ -1,8 +1,8 @@
-package io.github.jpalmerr.footballdata
+package footballdata
 
 import cats.effect.IO
-import footballdata.routes.HelloWorldRoute
 import footballdata.models.HelloWorld
+import footballdata.routes.HelloWorldRoute
 import org.http4s._
 import org.http4s.implicits._
 import org.specs2.matcher.MatchResult
