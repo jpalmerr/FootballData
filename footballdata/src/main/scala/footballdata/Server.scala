@@ -2,31 +2,28 @@ package footballdata
 
 import cats.effect.{ConcurrentEffect, ContextShift, Resource, Timer}
 import cats.implicits._
-import footballdata.client.HttpFootballClient
 import footballdata.routes._
-import fs2.Stream
 import org.http4s.client.blaze.BlazeClientBuilder
 import org.http4s.implicits._
+import org.http4s.server.Server
 import org.http4s.server.blaze.BlazeServerBuilder
 import org.http4s.server.middleware.Logger
 
 import scala.concurrent.ExecutionContext.global
 
-object Server {
+object FootballServer {
 
-  def stream[F[_]: ConcurrentEffect](implicit T: Timer[F], C: ContextShift[F]): Stream[F, Nothing] = {
+  def stream[F[_]: ConcurrentEffect](resources: Resources[F])(implicit T: Timer[F], C: ContextShift[F]): Resource[F, Server[F]] = {
+    import resources._
 
-    val ec = scala.concurrent.ExecutionContext.global
-
-    val httpFootballClient: Resource[F, HttpFootballClient[F]] = HttpFootballClient(ec)
-
+    // pass mcp into routes that choose to use them
+    // can then be added to httpApp
     val mcp = MasterControlProgram(
-      ???
+      footballClient
     )
 
-
     for {
-      client <- BlazeClientBuilder[F](global).stream
+      client <- BlazeClientBuilder[F](global).resource
       helloWorldAlg = HelloWorldProgram.impl[F]
       jokeAlg = JokesProgram.impl[F](client)
 
@@ -42,7 +39,8 @@ object Server {
       exitCode <- BlazeServerBuilder[F]
         .bindHttp(8080, "0.0.0.0")
         .withHttpApp(finalHttpApp)
-        .serve
+        .resource
     } yield exitCode
-  }.drain
+  }
+
 }

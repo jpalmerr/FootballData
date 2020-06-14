@@ -15,7 +15,7 @@ trait FootballClient[F[_]] {
   def getApiStatus: F[StatusResponse]
 }
 
-class HttpFootballClient[F[_]: Sync](client: Client[F]) extends FootballClient[F] {
+final class HttpFootballClient[F[_]: Sync](client: Client[F]) extends FootballClient[F] {
 
   override def getApiStatus: F[StatusResponse] = {
     val footballStatusUrl: Uri =  uri"https://v2.api-football.com/status"
