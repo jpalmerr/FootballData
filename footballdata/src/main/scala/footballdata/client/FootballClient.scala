@@ -25,7 +25,7 @@ final class HttpFootballClient[F[_]: Sync](client: Client[F]) extends FootballCl
         method = Method.GET,
         uri = footballStatusUrl
       )
-        .withHeaders(Headers.of(Header("X-RapidAPI-Key", "TODOKEY"))) // TODO: add api keys
+        .withHeaders(Headers.of(Header("X-RapidAPI-Key", "TODOKEY"))) // TODO: add api keys: NEVER COMMIT ME
 
     client
       .fetch(req) { resp =>
