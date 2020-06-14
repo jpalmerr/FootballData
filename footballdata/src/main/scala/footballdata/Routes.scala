@@ -4,6 +4,7 @@ import cats.effect.Sync
 import cats.implicits._
 import org.http4s.HttpRoutes
 import org.http4s.dsl.Http4sDsl
+import models._
 
 object Routes {
 

@@ -1,5 +1,6 @@
 package footballdata
 
+import models._
 import cats.effect.{ConcurrentEffect, ContextShift, Timer}
 import cats.implicits._
 import fs2.Stream
@@ -19,8 +20,8 @@ object Server {
 
       // Combine Service Routes into an HttpApp
       httpApp = (
-        FootballdataRoutes.helloWorldRoutes[F](helloWorldAlg) <+>
-        FootballdataRoutes.jokeRoutes[F](jokeAlg)
+        Routes.helloWorldRoutes[F](helloWorldAlg) <+>
+        Routes.jokeRoutes[F](jokeAlg)
       ).orNotFound
 
       // With Middlewares in place

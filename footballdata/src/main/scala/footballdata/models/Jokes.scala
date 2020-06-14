@@ -1,4 +1,4 @@
-package footballdata
+package footballdata.models
 
 import cats.Applicative
 import cats.effect.Sync

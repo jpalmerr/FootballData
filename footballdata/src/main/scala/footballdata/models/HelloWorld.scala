@@ -1,4 +1,4 @@
-package footballdata
+package footballdata.models
 
 import cats.Applicative
 import cats.implicits._
@@ -32,6 +32,6 @@ object HelloWorld {
 
   def impl[F[_]: Applicative]: HelloWorld[F] = new HelloWorld[F]{
     def hello(n: HelloWorld.Name): F[HelloWorld.Greeting] =
-        Greeting("Hello, " + n.name).pure[F]
+      Greeting("Hello, " + n.name).pure[F]
   }
 }
