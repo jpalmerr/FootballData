@@ -1,7 +1,8 @@
 package footballdata
 
-import cats.effect.{ConcurrentEffect, ContextShift, Timer}
+import cats.effect.{ConcurrentEffect, ContextShift, Resource, Timer}
 import cats.implicits._
+import footballdata.client.HttpFootballClient
 import footballdata.routes._
 import fs2.Stream
 import org.http4s.client.blaze.BlazeClientBuilder
@@ -14,6 +15,16 @@ import scala.concurrent.ExecutionContext.global
 object Server {
 
   def stream[F[_]: ConcurrentEffect](implicit T: Timer[F], C: ContextShift[F]): Stream[F, Nothing] = {
+
+    val ec = scala.concurrent.ExecutionContext.global
+
+    val httpFootballClient: Resource[F, HttpFootballClient[F]] = HttpFootballClient(ec)
+
+    val mcp = MasterControlProgram(
+      ???
+    )
+
+
     for {
       client <- BlazeClientBuilder[F](global).stream
       helloWorldAlg = HelloWorldProgram.impl[F]
