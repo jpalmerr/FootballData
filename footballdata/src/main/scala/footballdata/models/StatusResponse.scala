@@ -12,7 +12,7 @@ object StatusResponse {
   implicit val decoder: Decoder[StatusResponse] = deriveDecoder
   implicit val encoder: Encoder[StatusResponse] = deriveEncoder
 
-  implicit def hasHadEntitlementsEntityDecoder[F[_]: Sync]: EntityDecoder[F, StatusResponse] = jsonOf[F, StatusResponse]
+  implicit def statusResponseEntityDecoder[F[_]: Sync]: EntityDecoder[F, StatusResponse] = jsonOf[F, StatusResponse]
 }
 
 case class Status(
