@@ -16,6 +16,8 @@ object MasterControlProgram {
                         )
   = new MasterControlProgram[F] {
 
-    override def getStatus: F[StatusResponse] = ???
+    override def getStatus: F[StatusResponse] = {
+      footballClient.getApiStatus
+    }
   }
 }

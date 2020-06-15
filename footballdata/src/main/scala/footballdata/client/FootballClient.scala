@@ -9,11 +9,20 @@ import org.http4s.syntax.all._
 import org.http4s._
 
 import scala.concurrent.ExecutionContext
-import scala.concurrent.duration.{Duration, _}
+import scala.concurrent.duration._
 
 trait FootballClient[F[_]] {
   def getApiStatus: F[StatusResponse]
 }
+
+/**
+  *
+  * @param client
+  *
+  * client is https://www.api-football.com/
+  * sub the api key into headers to make requests
+  * never commit the api key
+  */
 
 final class HttpFootballClient[F[_]: Sync](client: Client[F]) extends FootballClient[F] {
 
@@ -25,7 +34,7 @@ final class HttpFootballClient[F[_]: Sync](client: Client[F]) extends FootballCl
         method = Method.GET,
         uri = footballStatusUrl
       )
-        .withHeaders(Headers.of(Header("X-RapidAPI-Key", "TODOKEY"))) // TODO: add api keys: NEVER COMMIT ME
+        .withHeaders(Headers.of(Header("X-RapidAPI-Key", "TODOKEY"))) // TODO: add api keys
 
     client
       .fetch(req) { resp =>
