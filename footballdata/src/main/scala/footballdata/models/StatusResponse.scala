@@ -32,7 +32,6 @@ case class Status(
                    subscriptionEnd: String,
                    requests: Int,
                    requestsLimitDay: Int,
-                   payments: Seq[String]
                  )
 
 object Status {
@@ -46,7 +45,7 @@ object Status {
       sub     <- c.downField("subscription_end").as[String]
       reqs    <- c.downField("requests").as[Int]
       reqslim <- c.downField("requests_limit_day").as[Int]
-      payment <- c.downField("payments").as[Seq[String]]
+      _       <- c.downField("payments").as[Unit]
   }  yield Status(
     user,
     email,
@@ -56,7 +55,6 @@ object Status {
     sub,
     reqs,
     reqslim,
-    payment
   )
 
   implicit val encoder: Encoder[Status] = deriveEncoder
