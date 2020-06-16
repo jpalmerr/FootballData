@@ -3,13 +3,10 @@ package footballdata
 import cats.effect.{ConcurrentEffect, ContextShift, Resource, Timer}
 import cats.implicits._
 import footballdata.routes._
-import org.http4s.client.blaze.BlazeClientBuilder
 import org.http4s.implicits._
 import org.http4s.server.Server
 import org.http4s.server.blaze.BlazeServerBuilder
 import org.http4s.server.middleware.Logger
-
-import scala.concurrent.ExecutionContext.global
 
 object FootballServer {
 
@@ -22,21 +19,18 @@ object FootballServer {
       footballClient
     )
 
-    for {
-      client <- BlazeClientBuilder[F](global).resource
-      helloWorldAlg = HelloWorldProgram.impl[F]
-      jokeAlg = JokesProgram.impl[F](client)
+    val helloWorldAlg = HelloWorldProgram.impl[F]
 
-      // Combine Service Routes into an HttpApp
-      httpApp = (
+    // Combine Service Routes into an HttpApp
+    val httpApp = (
         HelloWorldRoute.helloWorldRoutes[F](helloWorldAlg) <+>
-        JokeRoute.jokeRoutes[F](jokeAlg) <+>
         StatusRoute.route[F](mcp)
       ).orNotFound
 
-      // With Middlewares in place
-      finalHttpApp = Logger.httpApp(true, true)(httpApp)
+    // With Middlewares in place
+    val finalHttpApp = Logger.httpApp(true, true)(httpApp)
 
+    for {
       exitCode <- BlazeServerBuilder[F]
         .bindHttp(8080, "0.0.0.0")
         .withHttpApp(finalHttpApp)
