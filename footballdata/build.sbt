@@ -32,3 +32,4 @@ scalacOptions ++= Seq(
 )
 
 addCommandAlias("commitCheck", "clean; compile; test")
+addCommandAlias("rerun", "clean; run")

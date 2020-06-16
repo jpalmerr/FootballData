@@ -29,7 +29,7 @@ case class Status(
                    plan: String,
                    token: String,
                    active: String,
-                   subscription: String,
+                   subscriptionEnd: String,
                    requests: Int,
                    requestsLimitDay: Int,
                    payments: Seq[String]
