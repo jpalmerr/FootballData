@@ -30,7 +30,8 @@ object FootballServer {
       // Combine Service Routes into an HttpApp
       httpApp = (
         HelloWorldRoute.helloWorldRoutes[F](helloWorldAlg) <+>
-        JokeRoute.jokeRoutes[F](jokeAlg)
+        JokeRoute.jokeRoutes[F](jokeAlg) <+>
+        StatusRoute.route[F](mcp)
       ).orNotFound
 
       // With Middlewares in place

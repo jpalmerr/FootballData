@@ -28,13 +28,17 @@ final class HttpFootballClient[F[_]: Sync](client: Client[F]) extends FootballCl
 
   override def getApiStatus: F[StatusResponse] = {
     val footballStatusUrl: Uri =  uri"https://v2.api-football.com/status"
+    val hostHeader = Header("x-rapidapi-host", "api-football-v1.p.rapidapi.com")
+    val keyHeader = Header("x-rapidapi-key", "")
 
     val req =
       Request[F](
         method = Method.GET,
         uri = footballStatusUrl
       )
-        .withHeaders(Headers.of(Header("X-RapidAPI-Key", "TODOKEY"))) // TODO: add api keys
+        .withHeaders(
+          Headers.of(hostHeader, keyHeader)
+        )
 
     client
       .fetch(req) { resp =>
@@ -45,7 +49,7 @@ final class HttpFootballClient[F[_]: Sync](client: Client[F]) extends FootballCl
           case Status.GatewayTimeout | Status.RequestTimeout =>
             ServiceError.FootballClientTimeout.raiseError[F, StatusResponse]
 
-          case _ =>
+          case err @ _ =>
             ServiceError.FootballClientFailure.raiseError[F, StatusResponse]
         }
       }

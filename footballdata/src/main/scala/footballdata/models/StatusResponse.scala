@@ -1,12 +1,12 @@
 package footballdata.models
 
 import cats.effect.Sync
-import io.circe.{Decoder, Encoder}
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
-import org.http4s.circe.jsonOf
+import io.circe.{Decoder, Encoder}
 import org.http4s.EntityDecoder
+import org.http4s.circe.jsonOf
 
-case class StatusResponse(results: Int, status: Status)
+case class StatusResponse(api: Api)
 
 object StatusResponse {
   implicit val decoder: Decoder[StatusResponse] = deriveDecoder
@@ -15,15 +15,24 @@ object StatusResponse {
   implicit def statusResponseEntityDecoder[F[_]: Sync]: EntityDecoder[F, StatusResponse] = jsonOf[F, StatusResponse]
 }
 
+case class Api(results: Int, status: Status)
+
+object Api {
+  implicit val decoder: Decoder[Api] = deriveDecoder
+  implicit val encoder: Encoder[Api] = deriveEncoder
+}
+
+
 case class Status(
                    user: String,
                    email: String,
                    plan: String,
                    token: String,
                    active: String,
-                   subscriptionEnd: String,
+                   subscription_end: String,
                    requests: Int,
-                   requestLimitDaily: Int
+                   requests_limit_day: Int,
+                   payments: Seq[String]
                  )
 
 object Status {
