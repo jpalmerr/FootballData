@@ -2,7 +2,7 @@ package footballdata.models
 
 import cats.effect.Sync
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
-import io.circe.{Decoder, Encoder}
+import io.circe.{Decoder, Encoder, HCursor}
 import org.http4s.EntityDecoder
 import org.http4s.circe.jsonOf
 
@@ -29,13 +29,35 @@ case class Status(
                    plan: String,
                    token: String,
                    active: String,
-                   subscription_end: String,
+                   subscription: String,
                    requests: Int,
-                   requests_limit_day: Int,
+                   requestsLimitDay: Int,
                    payments: Seq[String]
                  )
 
 object Status {
-  implicit val decoder: Decoder[Status] = deriveDecoder
+  implicit val decoder: Decoder[Status] = (c: HCursor) =>
+  for {
+      user    <- c.downField("user").as[String]
+      email   <- c.downField("email").as[String]
+      plan    <- c.downField("plan").as[String]
+      token   <- c.downField("token").as[String]
+      active  <- c.downField("active").as[String]
+      sub     <- c.downField("subscription_end").as[String]
+      reqs    <- c.downField("requests").as[Int]
+      reqslim <- c.downField("requests_limit_day").as[Int]
+      payment <- c.downField("payments").as[Seq[String]]
+  }  yield Status(
+    user,
+    email,
+    plan,
+    token,
+    active,
+    sub,
+    reqs,
+    reqslim,
+    payment
+  )
+
   implicit val encoder: Encoder[Status] = deriveEncoder
 }

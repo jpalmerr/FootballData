@@ -49,7 +49,7 @@ final class HttpFootballClient[F[_]: Sync](client: Client[F]) extends FootballCl
           case Status.GatewayTimeout | Status.RequestTimeout =>
             ServiceError.FootballClientTimeout.raiseError[F, StatusResponse]
 
-          case err @ _ =>
+          case _ =>
             ServiceError.FootballClientFailure.raiseError[F, StatusResponse]
         }
       }
