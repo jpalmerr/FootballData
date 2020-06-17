@@ -6,7 +6,7 @@ import io.circe.{Decoder, Encoder, HCursor}
 import org.http4s.EntityDecoder
 import org.http4s.circe.jsonOf
 
-case class StatusResponse(api: Api)
+final case class StatusResponse(api: Api)
 
 object StatusResponse {
   implicit val decoder: Decoder[StatusResponse] = deriveDecoder
@@ -15,7 +15,7 @@ object StatusResponse {
   implicit def statusResponseEntityDecoder[F[_]: Sync]: EntityDecoder[F, StatusResponse] = jsonOf[F, StatusResponse]
 }
 
-case class Api(results: Int, status: Status)
+final case class Api(results: Int, status: Status)
 
 object Api {
   implicit val decoder: Decoder[Api] = deriveDecoder
@@ -23,7 +23,7 @@ object Api {
 }
 
 
-case class Status(
+final case class Status(
                    user: String,
                    email: String,
                    plan: String,
