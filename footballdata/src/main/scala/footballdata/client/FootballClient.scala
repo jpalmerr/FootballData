@@ -27,11 +27,12 @@ trait FootballClient[F[_]] {
 
 final class HttpFootballClient[F[_]: Sync](client: Client[F]) extends FootballClient[F] {
 
+  val uri: Uri = uri"https://v2.api-football.com"
   private val hostHeader = Header("x-rapidapi-host", "api-football-v1.p.rapidapi.com")
   private val keyHeader = Header("x-rapidapi-key", "")
 
   override def getApiStatus: F[StatusResponse] = {
-    val footballStatusUrl: Uri =  uri"https://v2.api-football.com/status"
+    val footballStatusUrl: Uri =  uri.withPath("/status")
 
     val req =
       Request[F](
@@ -58,12 +59,11 @@ final class HttpFootballClient[F[_]: Sync](client: Client[F]) extends FootballCl
   }
 
   override def getTeamTransfers(teamId: Int): F[TeamTransferResponse] = {
-    val footballTransfersUri = uri"https://v2.api-football.com/transfers/team/$teamId"
 
     val req =
       Request[F](
         method = Method.GET,
-        uri = footballTransfersUri
+        uri = uri / "transfers" /"team" / teamId.toString
       )
           .withHeaders(
             Headers.of(hostHeader, keyHeader)
