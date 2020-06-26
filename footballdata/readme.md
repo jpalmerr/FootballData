@@ -2,10 +2,21 @@
 
 ## How to 
 
-I have added two commit aliases:
+I have added two sbt aliases:
 
 `sbt commitCheck`: `clean; compile; test`
 `sbt rerun`: `clean; run`
+
+## Client
+
+To hit the football api client, manually pass api key into `keyHeader`.
+
+Of course, my personal key remains private.
+
+## Endpoints
+
+`/status` - football api status endpoint
+`/teamTransfers/{teamId}` - get transfers by team
 
 ## Interesting teams
 
