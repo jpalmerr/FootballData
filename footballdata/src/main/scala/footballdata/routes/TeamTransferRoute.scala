@@ -20,8 +20,5 @@ object TeamTransferRoute extends ServiceCodecs {
           mcp.getTransfersByTeam(teamId)
         }
     }
-
-
   }
-
 }
