@@ -7,7 +7,7 @@ import footballdata.models.{StatusResponse, TeamTransferResponse}
 trait MasterControlProgram[F[_]] {
 
   def getStatus: F[StatusResponse]
-  def getTransfersByTeam: F[TeamTransferResponse]
+  def getTransfersByTeam(teamId: Int): F[TeamTransferResponse]
 }
 
 object MasterControlProgram {
@@ -21,6 +21,8 @@ object MasterControlProgram {
       footballClient.getApiStatus
     }
 
-    override def getTransfersByTeam: F[TeamTransferResponse] = ???
+    override def getTransfersByTeam(teamId: Int): F[TeamTransferResponse] = {
+      footballClient.getTeamTransfers(teamId)
+    }
   }
 }

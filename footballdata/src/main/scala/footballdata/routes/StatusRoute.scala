@@ -10,7 +10,6 @@ import org.http4s.dsl.io._
 
 object StatusRoute extends ServiceCodecs {
 
-
   def route[F[_] : Sync](mcp: MasterControlProgram[F]): HttpRoutes[F] = {
 
     implicit val entityEncoder: EntityEncoder[F, StatusResponse] = jsonEncoderOf[F, StatusResponse]

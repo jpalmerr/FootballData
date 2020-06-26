@@ -24,7 +24,8 @@ object FootballServer {
     // Combine Service Routes into an HttpApp
     val httpApp = (
         HelloWorldRoute.helloWorldRoutes[F](helloWorldAlg) <+>
-        StatusRoute.route[F](mcp)
+        StatusRoute.route[F](mcp) <+>
+        TeamTransferRoute.route[F](mcp)
       ).orNotFound
 
     // With Middlewares in place
