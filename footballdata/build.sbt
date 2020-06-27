@@ -3,6 +3,7 @@ val CirceVersion = "0.13.0"
 val Specs2Version = "4.9.3"
 val LogbackVersion = "1.2.3"
 val DoobieVersion = "0.8.8"
+val FlywayVersion                = "6.4.4"
 
 lazy val root = (project in file("."))
   .settings(
@@ -20,6 +21,7 @@ lazy val root = (project in file("."))
       "org.tpolecat"    %% "doobie-hikari"       % DoobieVersion,
       "org.tpolecat"    %% "doobie-postgres"     % DoobieVersion,
       "org.specs2"      %% "specs2-core"         % Specs2Version % "test",
+      "org.flywaydb"    % "flyway-core"          % FlywayVersion,
       "ch.qos.logback"  %  "logback-classic"     % LogbackVersion
     ),
     addCompilerPlugin("org.typelevel" %% "kind-projector"     % "0.10.3"),
