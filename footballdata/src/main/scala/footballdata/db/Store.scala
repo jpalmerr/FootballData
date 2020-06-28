@@ -13,6 +13,7 @@ import footballdata.models.TransferData
 trait Store[F[_], G[_]] {
   def upsertTransferData(transferData: TransferData): G[Unit]
   def commit[A](f: G[A]): F[A]
+  def lift: FunctionK[F, G]
 }
 
 class PostgresStore[F[_]](transactor: Transactor[F], val lift: FunctionK[F, ConnectionIO])(implicit b: Bracket[F, Throwable])
