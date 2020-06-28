@@ -18,6 +18,11 @@ Of course, my personal key remains private.
 `/status` - football api status endpoint
 `/teamTransfers/{teamId}` - get transfers by team
 
+## DB 
+
+`docker run --name postgres-football -e POSTGRES_DB=football -e POSTGRES_USER=football-app -e POSTGRES_PASSWORD=password -p 5432:5432 -d postgres:11`
+`psql -h localhost -U football-app football`
+
 ## Interesting teams
 
 ```json
