@@ -1,8 +1,10 @@
 package footballdata
 
 import cats.effect.Sync
+import cats.implicits._
 import footballdata.client.FootballClient
-import footballdata.models.{StatusResponse, TeamTransferResponse}
+import footballdata.db.Store
+import footballdata.models.{StatusResponse, TeamTransferResponse, TransferData}
 
 trait MasterControlProgram[F[_]] {
 
@@ -12,8 +14,9 @@ trait MasterControlProgram[F[_]] {
 
 object MasterControlProgram {
 
-  def apply[F[_]: Sync] (
-                        footballClient: FootballClient[F]
+  def apply[F[_]: Sync, G[_]: Sync] (
+                        footballClient: FootballClient[F],
+                        store: Store[F, G]
                         )
   = new MasterControlProgram[F] {
 
@@ -22,7 +25,19 @@ object MasterControlProgram {
     }
 
     override def getTransfersByTeam(teamId: Int): F[TeamTransferResponse] = {
-      footballClient.getTeamTransfers(teamId)
+      store.commit {
+        for {
+          response <- store.lift(footballClient.getTeamTransfers(teamId))
+          data     = response.api.transfers
+          _        <- upsertTransferData(data)
+        } yield response
+      }
+    }
+
+    private def upsertTransferData(transferData: Seq[TransferData]): G[Unit] = {
+      transferData.foreach { td =>
+        store.upsertTransferData(td)
+      }.pure[G]
     }
   }
 }

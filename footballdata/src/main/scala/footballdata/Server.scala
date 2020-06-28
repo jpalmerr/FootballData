@@ -1,6 +1,6 @@
 package footballdata
 
-import cats.effect.{ConcurrentEffect, ContextShift, Resource, Timer}
+import cats.effect.{ConcurrentEffect, ContextShift, Resource, Sync, Timer}
 import cats.implicits._
 import footballdata.routes._
 import org.http4s.implicits._
@@ -10,13 +10,14 @@ import org.http4s.server.middleware.Logger
 
 object FootballServer {
 
-  def stream[F[_]: ConcurrentEffect](resources: Resources[F])(implicit T: Timer[F], C: ContextShift[F]): Resource[F, Server[F]] = {
+  def stream[F[_]: ConcurrentEffect, G[_]: Sync](resources: Resources[F, G])(implicit T: Timer[F], C: ContextShift[F]): Resource[F, Server[F]] = {
     import resources._
 
     // pass mcp into routes that choose to use them
     // can then be added to httpApp
     val mcp = MasterControlProgram(
-      footballClient
+      footballClient,
+      store
     )
 
     val helloWorldAlg = HelloWorldProgram.impl[F]
