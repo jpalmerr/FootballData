@@ -3,7 +3,7 @@ val CirceVersion = "0.13.0"
 val Specs2Version = "4.9.3"
 val LogbackVersion = "1.2.3"
 val DoobieVersion = "0.8.8"
-val FlywayVersion                = "6.4.4"
+val FlywayVersion = "6.4.4"
 
 lazy val root = (project in file("."))
   .settings(
