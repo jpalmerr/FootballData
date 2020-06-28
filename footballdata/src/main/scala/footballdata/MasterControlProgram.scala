@@ -25,7 +25,13 @@ object MasterControlProgram {
     }
 
     override def getTransfersByTeam(teamId: Int): F[TeamTransferResponse] = {
-      footballClient.getTeamTransfers(teamId)
+      store.commit {
+        for {
+          response <- store.lift(footballClient.getTeamTransfers(teamId))
+          data     = response.api.transfers
+          _        <- upsertTransferData(data)
+        } yield response
+      }
     }
 
     private def upsertTransferData(transferData: Seq[TransferData]): G[Unit] = {
