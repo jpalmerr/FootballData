@@ -8,8 +8,10 @@ import doobie.hikari.HikariTransactor
 import doobie.implicits._
 import doobie.util.transactor.Transactor
 import footballdata.ExecutionContexts
+import footballdata.models.TransferData
 
 trait Store[F[_], G[_]] {
+  def upsertTransferData(transferData: TransferData): G[Unit]
   def commit[A](f: G[A]): F[A]
 }
 
@@ -18,7 +20,11 @@ class PostgresStore[F[_]](transactor: Transactor[F], val lift: FunctionK[F, Conn
 
   val cioUnit: ConnectionIO[Unit] = ().pure[ConnectionIO]
 
+  override def upsertTransferData(transferData: TransferData): ConnectionIO[Unit] =
+    Statements.upsert(transferData).run.void
+
   override def commit[A](f: ConnectionIO[A]): F[A] = f.transact(transactor)
+
 }
 
 object PostgresStore {
