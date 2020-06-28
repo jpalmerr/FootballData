@@ -2,6 +2,7 @@ package footballdata
 
 import cats.effect.Sync
 import footballdata.client.FootballClient
+import footballdata.db.Store
 import footballdata.models.{StatusResponse, TeamTransferResponse}
 
 trait MasterControlProgram[F[_]] {
@@ -12,8 +13,9 @@ trait MasterControlProgram[F[_]] {
 
 object MasterControlProgram {
 
-  def apply[F[_]: Sync] (
-                        footballClient: FootballClient[F]
+  def apply[F[_]: Sync, G[_]: Sync] (
+                        footballClient: FootballClient[F],
+                        store: Store[F, G]
                         )
   = new MasterControlProgram[F] {
 

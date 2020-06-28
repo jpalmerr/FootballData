@@ -16,7 +16,8 @@ object FootballServer {
     // pass mcp into routes that choose to use them
     // can then be added to httpApp
     val mcp = MasterControlProgram(
-      footballClient
+      footballClient,
+      store
     )
 
     val helloWorldAlg = HelloWorldProgram.impl[F]
